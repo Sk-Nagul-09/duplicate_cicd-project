@@ -283,7 +283,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker Image'
-                sh 'docker build -t devopshubg333/batch13:${BUILD_NUMBER} .'
+                sh 'docker build -t nagul09/cicd-e-t-end-pro:${BUILD_NUMBER} -f Dockerfile .'
             }
         }
         stage('Push to Docker Hub') {
@@ -291,7 +291,7 @@ pipeline {
                 echo 'Pushing to Docker Hub'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
-                    sh 'docker push devopshubg333/batch13:${BUILD_NUMBER}'
+                    sh 'docker push nagul09/cicd-e-t-end-pro:${BUILD_NUMBER}'
                 }
             }
         }
@@ -302,10 +302,10 @@ pipeline {
                     sh '''
                     git config user.email "jenkins@ci.com"
                     git config user.name "Jenkins CI"
-                    sed -i "s/batch13:.*/batch13:${BUILD_NUMBER}/g" deploymentfiles/deployment.yml
+                    sed -i "s/cicd-e-t-end-pro:.*/cicd-e-t-end-pro:${BUILD_NUMBER}/g" deploymentfiles/deployment.yaml
                     git add .
                     git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/devopstraininghub/mindcircuit13.git HEAD:main
+                    git push https://${githubtoken}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main '''
                     '''
                 }
             }
